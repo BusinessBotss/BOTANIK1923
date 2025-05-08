@@ -7,7 +7,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
-      --primary: #c4a471; /* golden olive tone */
+      --primary: #c4a471;
       --bg-dark: #0f1b14;
       --bg-card: #18241c;
       --text-light: #ffffff;
@@ -32,7 +32,6 @@
     header h1 {
       color: var(--primary);
       font-size: 2.8rem;
-      letter-spacing: 1px;
     }
     header p {
       color: var(--text-muted);
@@ -192,13 +191,13 @@
       }
     }
 
-    document.getElementById('entryForm').addEventListener('submit', function(event) {
+    document.getElementById("entryForm").addEventListener("submit", function(event) {
       event.preventDefault();
-      const location = document.getElementById('location').value;
-      const eventName = document.getElementById('event').selectedOptions[0].text;
-      const payer = document.getElementById('payer').value;
-      const type = document.getElementById('type').selectedOptions[0].text;
-      const amount = document.getElementById('amount').value;
+      const location = document.getElementById("location").value;
+      const eventName = document.getElementById("event").selectedOptions[0].text;
+      const payer = document.getElementById("payer").value;
+      const type = document.getElementById("type").selectedOptions[0].text;
+      const amount = document.getElementById("amount").value;
       let details = '';
 
       if (type === 'Membership Payment') {
@@ -211,21 +210,26 @@
         details = `${document.getElementById('staff_name')?.value} (${document.getElementById('role')?.value})`;
       }
 
-      const row = document.createElement('tr');
+      const row = document.createElement("tr");
       row.innerHTML = `<td>${location}</td><td>${eventName}</td><td>${payer}</td><td>${type}</td><td>${details}</td><td>${amount}</td><td><button class='delete-btn' onclick='this.closest("tr").remove()'>×</button></td>`;
-      document.getElementById('log').appendChild(row);
+      document.getElementById("log").appendChild(row);
 
       this.reset();
-      document.getElementById('extraFields').innerHTML = '';
+      document.getElementById("extraFields").innerHTML = '';
     });
 
     document.getElementById("addToSheetBtn").addEventListener("click", function () {
-      const location = document.getElementById('location').value;
-      const eventName = document.getElementById('event').selectedOptions[0].text;
-      const payer = document.getElementById('payer').value;
-      const type = document.getElementById('type').selectedOptions[0].text;
-      const amount = document.getElementById('amount').value;
+      const location = document.getElementById("location").value;
+      const eventName = document.getElementById("event").selectedOptions[0].text;
+      const payer = document.getElementById("payer").value;
+      const type = document.getElementById("type").selectedOptions[0].text;
+      const amount = document.getElementById("amount").value;
       let details = '';
+
+      if (!location || !eventName || !payer || !type || !amount) {
+        alert("Please complete all fields before sending to Google Sheets.");
+        return;
+      }
 
       if (type === 'Membership Payment') {
         details = `Member: ${document.getElementById('member')?.value}, Method: ${document.getElementById('method')?.value}`;
