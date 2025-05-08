@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Botanik 1923 · Cost Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --primary: #64ffda;
+      --bg-dark: #0b0b0b;
+      --bg-card: #121212;
+      --text-light: #ffffff;
+      --text-muted: #888888;
+      --danger: #ff4d4d;
+    }
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      padding: 2rem;
+    }
+    header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    header h1 {
+      color: var(--primary);
+      font-size: 2.5rem;
+    }
+    header p {
+      color: var(--text-muted);
+      font-size: 1rem;
+    }
+    .form-section, .table-section {
+      background-color: var(--bg-card);
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(100,255,218,0.1);
+      margin-bottom: 2rem;
+    }
+    label {
+      display: block;
+      margin-top: 1rem;
+      font-weight: 600;
+    }
+    input, select, textarea {
+      width: 100%;
+      padding: 0.75rem;
+      margin-top: 0.5rem;
+      border-radius: 8px;
+      border: 1px solid #2c2c2c;
+      background-color: #1e1e1e;
+      color: var(--text-light);
+    }
+    button {
+      margin-top: 1.5rem;
+      padding: 0.75rem 2rem;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      background-color: var(--primary);
+      color: black;
+      cursor: pointer;
+    }
+    button:hover {
+      background-color: #4deac6;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 2rem;
+    }
+    th, td {
+      padding: 0.75rem;
+      text-align: left;
+      border-bottom: 1px solid #333;
+    }
+    th {
+      color: var(--primary);
+    }
+    .delete-btn {
+      background: none;
+      color: var(--danger);
+      border: none;
+      font-size: 1.2rem;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Botanik 1923</h1>
+    <p>Weekly Event Finance Dashboard · Mallorca & Miami</p>
+  </header>
+  <section class="form-section">
+    <form id="entryForm">
+      <label for="location">Location</label>
+      <select id="location" required>
+        <option value="">Select location</option>
+        <option value="Mallorca">Mallorca</option>
+        <option value="Miami">Miami</option>
+      </select>
+
+      <label for="event">Event</label>
+      <select id="event" required>
+        <option value="">Choose event</option>
+        <option value="miercoles_idiomas">Wednesday Language Exchange</option>
+        <option value="sabados_evento">Saturday Signature Night</option>
+        <option value="miercoles_libros">Wednesday Book & Literature Night</option>
+      </select>
+
+      <label for="payer">Payer Full Name</label>
+      <input type="text" id="payer" placeholder="Full name of the payer" required />
+
+      <label for="type">Entry Type</label>
+      <select id="type" onchange="updateFields()" required>
+        <option value="">Choose type</option>
+        <option value="membership">Membership Payment</option>
+        <option value="event_expense">Event Expense</option>
+        <option value="stock">Stock Purchase</option>
+        <option value="staff">Staff Payment</option>
+      </select>
+
+      <div id="extraFields"></div>
+
+      <label for="amount">Amount (€)</label>
+      <input type="number" id="amount" placeholder="0.00" required step="0.01" min="0" />
+
+      <button type="submit">Add Entry</button>
+      <button type="button" id="addToSheetBtn">Add to Google Sheet</button>
+    </form>
+  </section>
+
+  <section class="table-section">
+    <h2>Event Records</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Location</th>
+          <th>Event</th>
+          <th>Payer</th>
+          <th>Type</th>
+          <th>Details</th>
+          <th>Amount (€)</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody id="log"></tbody>
+    </table>
+  </section>
+
+  <script>
+    function updateFields() {
+      const type = document.getElementById('type').value;
+      const container = document.getElementById('extraFields');
+      container.innerHTML = '';
+
+      if (type === 'membership') {
+        container.innerHTML = `
+          <label for="member">Member Name</label>
+          <input type="text" id="member" placeholder="Full name">
+          <label for="method">Payment Method</label>
+          <select id="method">
+            <option value="cash">Cash</option>
+            <option value="card">Card</option>
+            <option value="transfer">Bank Transfer</option>
+          </select>`;
+      } else if (type === 'event_expense') {
+        container.innerHTML = `
+          <label for="supplier">Supplier / Service</label>
+          <input type="text" id="supplier" placeholder="e.g. DJ, security">
+          <label for="notes">Notes</label>
+          <textarea id="notes" placeholder="Extra details..."></textarea>`;
+      } else if (type === 'stock') {
+        container.innerHTML = `
+          <label for="items">Items Purchased</label>
+          <textarea id="items" placeholder="List of items..."></textarea>`;
+      } else if (type === 'staff') {
+        container.innerHTML = `
+          <label for="staff_name">Staff Name</label>
+          <input type="text" id="staff_name" placeholder="Full name">
+          <label for="role">Role</label>
+          <input type="text" id="role" placeholder="e.g. Bartender, Security">`;
+      }
+    }
+
+    document.getElementById('entryForm').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const location = document.getElementById('location').value;
+      const eventName = document.getElementById('event').selectedOptions[0].text;
+      const payer = document.getElementById('payer').value;
+      const type = document.getElementById('type').selectedOptions[0].text;
+      const amount = document.getElementById('amount').value;
+      let details = '';
+
+      if (type === 'Membership Payment') {
+        details = `Member: ${document.getElementById('member')?.value}, Method: ${document.getElementById('method')?.value}`;
+      } else if (type === 'Event Expense') {
+        details = `${document.getElementById('supplier')?.value} - ${document.getElementById('notes')?.value}`;
+      } else if (type === 'Stock Purchase') {
+        details = document.getElementById('items')?.value;
+      } else if (type === 'Staff Payment') {
+        details = `${document.getElementById('staff_name')?.value} (${document.getElementById('role')?.value})`;
+      }
+
+      const row = document.createElement('tr');
+      row.innerHTML = `<td>${location}</td><td>${eventName}</td><td>${payer}</td><td>${type}</td><td>${details}</td><td>${amount}</td><td><button class='delete-btn' onclick='this.closest("tr").remove()'>×</button></td>`;
+      document.getElementById('log').appendChild(row);
+
+      this.reset();
+      document.getElementById('extraFields').innerHTML = '';
+    });
+
+    document.getElementById("addToSheetBtn").addEventListener("click", function () {
+      const location = document.getElementById('location').value;
+      const eventName = document.getElementById('event').selectedOptions[0].text;
+      const payer = document.getElementById('payer').value;
+      const type = document.getElementById('type').selectedOptions[0].text;
+      const amount = document.getElementById('amount').value;
+      let details = '';
+
+      if (type === 'Membership Payment') {
+        details = `Member: ${document.getElementById('member')?.value}, Method: ${document.getElementById('method')?.value}`;
+      } else if (type === 'Event Expense') {
+        details = `${document.getElementById('supplier')?.value} - ${document.getElementById('notes')?.value}`;
+      } else if (type === 'Stock Purchase') {
+        details = document.getElementById('items')?.value;
+      } else if (type === 'Staff Payment') {
+        details = `${document.getElementById('staff_name')?.value} (${document.getElementById('role')?.value})`;
+      }
+
+      const url = "https://script.google.com/macros/s/AKfycbxA3GEcEfiHkQGXEo0-GO1E20jVpIq9Of6x-XhvV7mZxuOXgmbYGLCErjTfOxG_H2dx/exec";
+      const params = new URLSearchParams({ location, event: eventName, payer, type, details, amount });
+
+      fetch(`${url}?${params}`, { method: 'GET' })
+        .then(r => r.text())
+        .then(response => alert(`Response: ${response}`))
+        .catch(error => alert('Failed to connect to Google Sheets'));
+    });
+  </script>
+</body>
+</html>
