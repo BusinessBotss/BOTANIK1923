@@ -58,6 +58,13 @@
       background-color: #101c14;
       color: var(--text-light);
     }
+    .inline-selects {
+      display: flex;
+      gap: 1rem;
+    }
+    .inline-selects > div {
+      flex: 1;
+    }
     button {
       margin-top: 1.5rem;
       padding: 0.75rem 2rem;
@@ -108,25 +115,31 @@
         <option value="Miami">Miami</option>
       </select>
 
-      <label for="event">Event</label>
-      <select id="event" required>
-        <option value="">Choose event</option>
-        <option value="miercoles_idiomas">Wednesday Language Exchange</option>
-        <option value="sabados_evento">Saturday Signature Night</option>
-        <option value="miercoles_libros">Wednesday Book & Literature Night</option>
-      </select>
+      <div class="inline-selects">
+        <div>
+          <label for="event">Event</label>
+          <select id="event" required>
+            <option value="">Choose event</option>
+            <option value="Wednesday Language Exchange">Wednesday Language Exchange</option>
+            <option value="Saturday Signature Night">Saturday Signature Night</option>
+            <option value="Wednesday Book & Literature Night">Wednesday Book & Literature Night</option>
+          </select>
+        </div>
+
+        <div>
+          <label for="type">Entry Type</label>
+          <select id="type" onchange="updateFields()" required>
+            <option value="">Choose type</option>
+            <option value="Membership Payment">Membership Payment</option>
+            <option value="Event Expense">Event Expense</option>
+            <option value="Stock Purchase">Stock Purchase</option>
+            <option value="Staff Payment">Staff Payment</option>
+          </select>
+        </div>
+      </div>
 
       <label for="payer">Payer Full Name</label>
       <input type="text" id="payer" placeholder="Full name of the payer" required />
-
-      <label for="type">Entry Type</label>
-      <select id="type" onchange="updateFields()" required>
-        <option value="">Choose type</option>
-        <option value="membership">Membership Payment</option>
-        <option value="event_expense">Event Expense</option>
-        <option value="stock">Stock Purchase</option>
-        <option value="staff">Staff Payment</option>
-      </select>
 
       <div id="extraFields"></div>
 
@@ -162,7 +175,7 @@
       const container = document.getElementById('extraFields');
       container.innerHTML = '';
 
-      if (type === 'membership') {
+      if (type === 'Membership Payment') {
         container.innerHTML = `
           <label for="member">Member Name</label>
           <input type="text" id="member" placeholder="Full name">
@@ -172,17 +185,17 @@
             <option value="card">Card</option>
             <option value="transfer">Bank Transfer</option>
           </select>`;
-      } else if (type === 'event_expense') {
+      } else if (type === 'Event Expense') {
         container.innerHTML = `
           <label for="supplier">Supplier / Service</label>
           <input type="text" id="supplier" placeholder="e.g. DJ, security">
           <label for="notes">Notes</label>
           <textarea id="notes" placeholder="Extra details..."></textarea>`;
-      } else if (type === 'stock') {
+      } else if (type === 'Stock Purchase') {
         container.innerHTML = `
           <label for="items">Items Purchased</label>
           <textarea id="items" placeholder="List of items..."></textarea>`;
-      } else if (type === 'staff') {
+      } else if (type === 'Staff Payment') {
         container.innerHTML = `
           <label for="staff_name">Staff Name</label>
           <input type="text" id="staff_name" placeholder="Full name">
@@ -194,9 +207,9 @@
     document.getElementById("entryForm").addEventListener("submit", function(event) {
       event.preventDefault();
       const location = document.getElementById("location").value;
-      const eventName = document.getElementById("event").selectedOptions[0].text;
+      const eventName = document.getElementById("event").value;
       const payer = document.getElementById("payer").value;
-      const type = document.getElementById("type").selectedOptions[0].text;
+      const type = document.getElementById("type").value;
       const amount = document.getElementById("amount").value;
       let details = '';
 
@@ -220,9 +233,9 @@
 
     document.getElementById("addToSheetBtn").addEventListener("click", function () {
       const location = document.getElementById("location").value;
-      const eventName = document.getElementById("event").selectedOptions[0].text;
+      const eventName = document.getElementById("event").value;
       const payer = document.getElementById("payer").value;
-      const type = document.getElementById("type").selectedOptions[0].text;
+      const type = document.getElementById("type").value;
       const amount = document.getElementById("amount").value;
       let details = '';
 
