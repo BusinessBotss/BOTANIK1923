@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Botanik 1923 · Cost Tracker</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Botanik 1923 · Finance & Gallery</title>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
     :root {
@@ -12,43 +12,46 @@
       --bg-card: #18241c;
       --text-light: #ffffff;
       --text-muted: #a8a8a8;
-      --danger: #e74c3c;
     }
-    * {
-      box-sizing: border-box;
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-light);
+      font-family: 'Inter', sans-serif;
       margin: 0;
       padding: 0;
     }
-    body {
-      font-family: 'Inter', sans-serif;
-      background-color: var(--bg-dark);
-      color: var(--text-light);
-      padding: 2rem;
-    }
+
     header {
       text-align: center;
-      margin-bottom: 2rem;
+      padding: 2rem 1rem 1rem;
     }
+
     header h1 {
       color: var(--primary);
-      font-size: 2.8rem;
+      font-size: 2.5rem;
     }
+
     header p {
       color: var(--text-muted);
-      font-size: 1rem;
+      margin-top: 0.5rem;
     }
+
     .form-section {
       background-color: var(--bg-card);
+      max-width: 700px;
+      margin: 2rem auto;
       padding: 2rem;
       border-radius: 12px;
       box-shadow: 0 4px 12px rgba(196, 164, 113, 0.1);
-      margin-bottom: 2rem;
     }
+
     label {
       display: block;
       margin-top: 1rem;
       font-weight: 600;
     }
+
     input, select, textarea {
       width: 100%;
       padding: 0.75rem;
@@ -58,13 +61,16 @@
       background-color: #101c14;
       color: var(--text-light);
     }
+
     .inline-selects {
       display: flex;
       gap: 1rem;
     }
+
     .inline-selects > div {
       flex: 1;
     }
+
     button {
       margin-top: 1.5rem;
       padding: 0.75rem 2rem;
@@ -74,10 +80,39 @@
       background-color: var(--primary);
       color: #000;
       cursor: pointer;
-      transition: background 0.3s ease;
     }
-    button:hover {
-      background-color: #b59363;
+
+    .carousel-3d {
+      perspective: 1200px;
+      width: 500px;
+      height: 500px;
+      margin: 4rem auto 2rem;
+      position: relative;
+    }
+
+    .carousel-track-3d {
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      transform-style: preserve-3d;
+      animation: spin 40s linear infinite;
+    }
+
+    .carousel-track-3d img {
+      position: absolute;
+      width: 200px;
+      height: 130px;
+      object-fit: cover;
+      border-radius: 12px;
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+      left: 150px;
+      top: 160px;
+      transition: transform 0.5s ease;
+    }
+
+    @keyframes spin {
+      from { transform: rotateY(0deg); }
+      to { transform: rotateY(360deg); }
     }
   </style>
 </head>
@@ -86,6 +121,7 @@
     <h1>Botanik 1923</h1>
     <p>Finance Entry — Mallorca & Miami</p>
   </header>
+
   <section class="form-section">
     <form id="entryForm">
       <label for="location">Location</label>
@@ -129,6 +165,19 @@
       <button type="button" id="addToSheetBtn">Send to Google Sheet</button>
     </form>
   </section>
+
+  <div class="carousel-3d">
+    <div class="carousel-track-3d" id="carouselTrack">
+      <img src="https://drive.google.com/uc?export=view&id=13EgWrgOCv8jVbeWMN4ybOJ6qXsRzAUjb" alt="champagne">
+      <img src="https://drive.google.com/uc?export=view&id=15B6iV-Am4u5Yo9WnzwQqgznrdlUoCZma" alt="pornstar">
+      <img src="https://drive.google.com/uc?export=view&id=124_3Mq0i_PljHI5rj4rccedaiMtBeN2K" alt="logo">
+      <img src="https://drive.google.com/uc?export=view&id=1x52kAk_ZGqAJYvEd9hm8-Jf2lO7NCcJD" alt="cigar">
+      <img src="https://drive.google.com/uc?export=view&id=1tyic0dkkd7pLQfdFOOya7TpN2sm2ntP1" alt="piano">
+      <img src="https://drive.google.com/uc?export=view&id=1BcHpL4wDWFxiR4pTkcux3ro7hNLjsEAt" alt="mango">
+      <img src="https://drive.google.com/uc?export=view&id=1Sy23veJEpBMqx3KWywzzFpkX2QbZZFIY" alt="green cocktail">
+      <img src="https://drive.google.com/uc?export=view&id=1xP3aa4yx9q6m6qFSLwWzIy_gl-vlr8pa" alt="fire">
+    </div>
+  </div>
 
   <script>
     function updateFields() {
@@ -192,7 +241,7 @@
         role = document.getElementById('role')?.value || '';
       }
 
-     const url = "https://script.google.com/macros/s/AKfycbyqV9Xs9V-p8aZ3NrL_2xvFk6DwHSVzSny_ly3SLgCTc2BajoDhyAhToPZnTnA5pE_w3w/exec";
+      const url = "https://script.google.com/macros/s/AKfycbyqV9Xs9V-p8aZ3NrL_2xvFk6DwHSVzSny_ly3SLgCTc2BajoDhyAhToPZnTnA5pE_w3w/exec";
       const params = new URLSearchParams({ location, event: eventName, payer, type, amount, member, method, supplier, notes, items, staff_name, role });
 
       fetch(`${url}?${params}`, { method: 'GET' })
@@ -203,6 +252,16 @@
           document.getElementById("extraFields").innerHTML = '';
         })
         .catch(error => alert('Failed to connect to Google Sheets'));
+    });
+
+    // Carrusel 3D
+    const radius = 500;
+    const images = document.querySelectorAll(".carousel-track-3d img");
+    const step = 360 / images.length;
+
+    images.forEach((img, i) => {
+      const angle = step * i;
+      img.style.transform = `rotateY(${angle}deg) translateZ(${radius}px)`;
     });
   </script>
 </body>
