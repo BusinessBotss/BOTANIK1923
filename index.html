@@ -192,7 +192,7 @@
         role = document.getElementById('role')?.value || '';
       }
 
-      const url = "https://script.google.com/macros/s/AKfycbwvDdEpO8lN31GAxLPlnvgH6nULdFFGI2q6CESPBbE6d2-PJKnaZZz7ufsWKXoEqbHHzA/exec";
+     const url = "https://script.google.com/macros/s/AKfycbyqV9Xs9V-p8aZ3NrL_2xvFk6DwHSVzSny_ly3SLgCTc2BajoDhyAhToPZnTnA5pE_w3w/exec";
       const params = new URLSearchParams({ location, event: eventName, payer, type, amount, member, method, supplier, notes, items, staff_name, role });
 
       fetch(`${url}?${params}`, { method: 'GET' })
